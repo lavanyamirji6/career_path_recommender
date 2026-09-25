@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Career Path Recommender</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <!-- Chart.js for graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-light text-dark">
+  <!-- Global top-right ombre glow -->
+  <div class="background-glow"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark header-ombre px-4">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#home">
+        🎓 <span>Career Path Recommender</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item"><a class="nav-link text-white fw-semibold" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link text-white fw-semibold" href="#profile">Profile</a></li>
+          <li class="nav-item"><a class="nav-link text-white fw-semibold" href="#recommendations">Results</a></li>
+          <li class="nav-item"><a class="nav-link text-white fw-semibold" href="#compare">Compare</a></li>
+          <li class="nav-item"><a class="nav-link text-white fw-semibold" href="#extras">Extras</a></li>
+          <li class="nav-item ms-3">
+            <div class="form-check form-switch text-white">
+              <input class="form-check-input" type="checkbox" id="darkModeToggle">
+              <label class="form-check-label" for="darkModeToggle">🌙</label>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section id="home" class="text-center py-4 px-3">
+    <div class="container position-relative">
+      <h1 class="mb-2">Discover Your Future with <span class="text-gradient">Career Path Recommender</span></h1>
+      <p class="text-secondary">
+        Enter your skills, interests, and experience to get personalized career suggestions and insights.
+      </p>
+    </div>
+  </section>
+
+  <!-- Your Profile + Live Preview -->
+  <section id="profile" class="container my-4">
+    <div class="row g-4">
+      <!-- Your Profile -->
+      <div class="col-lg-6">
+        <div class="bg-white border rounded-4 p-4 shadow-sm border-warning-subtle position-relative">
+          <h2 class="text-gradient">Your Profile</h2>
+          <p class="text-secondary">Tell us about yourself to get personalized career suggestions.</p>
+          <form id="profileForm">
+            <div class="mb-3">
+              <label for="skills" class="form-label fw-bold">Skills</label>
+              <input type="text" class="form-control" id="skills" placeholder="e.g., Python, Graphic Design"/>
+            </div>
+            <div class="mb-3">
+              <label for="interests" class="form-label fw-bold">Interests</label>
+              <input type="text" class="form-control" id="interests" placeholder="e.g., Technology, Art"/>
+            </div>
+            <div class="mb-3">
+              <label for="experience" class="form-label fw-bold">Experience</label>
+              <textarea class="form-control" id="experience" rows="4" placeholder="Describe your background"></textarea>
+            </div>
+            <button type="submit" class="btn btn-ombre w-100 fw-bold">Get Recommendations</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Live Preview -->
+      <div class="col-lg-6">
+        <div class="bg-white border rounded-4 p-4 shadow-sm border-info-subtle">
+          <h2 class="text-gradient">Live Preview</h2>
+          <p class="text-secondary">See how your profile looks as you type:</p>
+          <div id="profilePreview">
+            <p><strong>Skills:</strong> <span id="previewSkills">-</span></p>
+            <p><strong>Interests:</strong> <span id="previewInterests">-</span></p>
+            <p><strong>Experience:</strong> <span id="previewExperience">-</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recommendations + Save Results -->
+  <section id="recommendations" class="container my-4">
+    <div class="bg-warning-subtle text-dark text-center p-4 rounded-4 border border-danger-subtle">
+      <p id="recommendationText">Your recommended career paths will appear here.</p>
+      <button id="saveResults" class="btn btn-ombre mt-3 fw-bold">Save Results</button>
+    </div>
+  </section>
+
+  <!-- Career Comparison Graph -->
+  <section id="compare" class="container my-4">
+    <div class="bg-white border rounded-4 p-4 shadow-sm">
+      <h2 class="text-gradient mb-3">Career Comparison</h2>
+      <p class="text-secondary mb-2">
+        Select up to 5 careers from your latest results to compare salary, demand, and future trend.
+      </p>
+
+      <!-- Dynamic checkboxes from the latest results -->
+      <div id="careerCheckboxes" class="mb-3 small">
+        <em>Run recommendations first, then your careers will appear here for comparison.</em>
+      </div>
+
+      <button id="updateChartBtn" class="btn btn-ombre mb-3" disabled>Update Comparison Graph</button>
+
+      <canvas id="careerChart" height="140"></canvas>
+    </div>
+  </section>
+
+  <!-- Extra Features: Quiz + Roadmap + Demand legend -->
+  <section id="extras" class="container my-5">
+    <div class="row g-4">
+      <!-- Personality Quiz -->
+      <div class="col-lg-4">
+        <div class="bg-white border rounded-4 p-4 shadow-sm h-100 apple-quiz-card">
+          <h3 class="text-gradient mb-3">🎯 Personality Quiz</h3>
+          <p class="text-secondary mb-2">Quick quiz to hint if you’re more technical or creative.</p>
+          <div id="quizArea">
+            <button class="btn btn-ombre w-100 fw-bold" id="startQuizBtn">Start Quiz</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Career Roadmap (for top career) -->
+      <div class="col-lg-4">
+        <div class="bg-white border rounded-4 p-4 shadow-sm h-100">
+          <h3 class="text-gradient mb-3">🚀 Career Roadmap</h3>
+          <p class="text-secondary mb-2">Steps for your top recommended career.</p>
+          <div id="roadmapBox">
+            <p class="text-muted mb-1">Run recommendations to see your roadmap.</p>
+            <ul id="roadmapList" class="mb-0"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Job Market Demand legend -->
+      <div class="col-lg-4">
+        <div class="bg-white border rounded-4 p-4 shadow-sm h-100">
+          <h3 class="text-gradient mb-3">📈 Job Market Demand</h3>
+          <p class="text-secondary mb-2">Each career shows a demand tag:</p>
+          <ul class="mb-2">
+            <li><span class="badge bg-success me-1">High</span> Many opportunities and strong hiring.</li>
+            <li><span class="badge bg-warning text-dark me-1 mt-1">Medium</span> Stable number of roles.</li>
+            <li><span class="badge bg-info text-dark me-1 mt-1">Emerging</span> New / growing field.</li>
+          </ul>
+          <p class="text-muted mb-0">Look for “Demand: High / Medium / Emerging” in your results above.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Page JS -->
+  <script>
+    // Dark mode
+    const darkToggle = document.getElementById('darkModeToggle');
+    if (darkToggle) {
+      darkToggle.addEventListener('change', () => {
+        document.body.classList.toggle('dark-mode');
+      });
+    }
+
+    // Live Preview
+    const skillsInput = document.getElementById('skills');
+    const interestsInput = document.getElementById('interests');
+    const experienceInput = document.getElementById('experience');
+
+    skillsInput.addEventListener('input', () => {
+      document.getElementById('previewSkills').textContent = skillsInput.value || "-";
+    });
+    interestsInput.addEventListener('input', () => {
+      document.getElementById('previewInterests').textContent = interestsInput.value || "-";
+    });
+    experienceInput.addEventListener('input', () => {
+      document.getElementById('previewExperience').textContent = experienceInput.value || "-";
+    });
+
+    // Global to store latest careers from backend
+    let lastCareersResult = [];
+    let careerChart = null;
+
+    // Submit form → call backend
+    document.getElementById('profileForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const payload = {
+        skills: skillsInput.value,
+        interests: interestsInput.value,
+        experience: experienceInput.value
+      };
+
+      try {
+        const res = await fetch("/api/recommend", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        const container = document.getElementById('recommendationText');
+
+        if (!data.careers || data.careers.length === 0) {
+          container.textContent = "No careers matched. Try adding more skills.";
+          lastCareersResult = [];
+          document.getElementById("careerCheckboxes").innerHTML =
+            "<em>No careers to compare yet.</em>";
+          document.getElementById("updateChartBtn").disabled = true;
+          return;
+        }
+
+        lastCareersResult = data.careers;
+
+        let html = "";
+        data.careers.forEach((c, index) => {
+          const demandClass =
+            c.demand === "High" ? "bg-success" :
+            c.demand === "Medium" ? "bg-warning text-dark" :
+            "bg-info text-dark";
+
+          html += `
+            <div class="text-start mb-3">
+              <strong>#${index + 1} ${c.title}</strong><br>
+              <span class="badge ${demandClass} my-1">Demand: ${c.demand}</span>
+              <p class="mb-1">${c.description}</p>
+              <strong>Roadmap:</strong>
+              <ol class="mb-1">
+                ${c.roadmap.map(step => `<li>${step}</li>`).join("")}
+              </ol>
+            </div>
+            <hr>
+          `;
+        });
+
+        container.innerHTML = html;
+
+        // Update roadmap box with first career
+        const topCareer = data.careers[0];
+        const roadmapList = document.getElementById('roadmapList');
+        roadmapList.innerHTML = "";
+        topCareer.roadmap.forEach(step => {
+          const li = document.createElement('li');
+          li.textContent = step;
+          roadmapList.appendChild(li);
+        });
+
+        // Build comparison checkboxes for graph
+        buildCareerCheckboxes();
+
+      } catch (err) {
+        console.error(err);
+        document.getElementById('recommendationText').textContent =
+          "Could not connect to backend. Make sure app.py is running.";
+      }
+    });
+
+    // Build checkboxes from lastCareersResult
+    function buildCareerCheckboxes() {
+      const boxDiv = document.getElementById("careerCheckboxes");
+      if (!lastCareersResult.length) {
+        boxDiv.innerHTML = "<em>No careers to compare yet.</em>";
+        document.getElementById("updateChartBtn").disabled = true;
+        return;
+      }
+
+      let html = '<div class="row row-cols-1 row-cols-md-2 g-1">';
+      lastCareersResult.forEach((c, idx) => {
+        html += `
+          <div class="col">
+            <div class="form-check">
+              <input class="form-check-input compare-career" type="checkbox"
+                     value="${idx}" id="careerCheck${idx}">
+              <label class="form-check-label small" for="careerCheck${idx}">
+                ${c.title}
+              </label>
+            </div>
+          </div>
+        `;
+      });
+      html += '</div><p class="small text-muted mt-1 mb-0">Select 2–5 careers, then click "Update Comparison Graph".</p>';
+      boxDiv.innerHTML = html;
+
+      document.getElementById("updateChartBtn").disabled = false;
+    }
+
+    // Save Results (simple POST; backend will handle)
+    document.getElementById('saveResults').addEventListener('click', async () => {
+      const payload = {
+        skills: skillsInput.value,
+        interests: interestsInput.value,
+        experience: experienceInput.value,
+        careers: lastCareersResult || []
+      };
+
+      try {
+        const res = await fetch("/api/save-results", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        alert(data.message || "Saved!");
+      } catch (err) {
+        console.error(err);
+        alert("Could not reach backend. Is app.py running?");
+      }
+    });
+
+    // Comparison graph button
+    document.getElementById("updateChartBtn").addEventListener("click", () => {
+      const checks = Array.from(document.querySelectorAll(".compare-career:checked"));
+      if (checks.length < 2 || checks.length > 5) {
+        alert("Please select between 2 and 5 careers to compare.");
+        return;
+      }
+
+      const selectedCareers = checks.map(ch => lastCareersResult[parseInt(ch.value, 10)]);
+
+      // Expect backend to send numeric levels: salary_level, demand_level, trend_level (1–5)
+      const labels = selectedCareers.map(c => c.title);
+      const salaryData = selectedCareers.map(c => c.salary_level || 3);
+      const demandData = selectedCareers.map(c => c.demand_level || 3);
+      const trendData  = selectedCareers.map(c => c.trend_level  || 3);
+
+      const ctx = document.getElementById("careerChart").getContext("2d");
+
+      if (careerChart) {
+        careerChart.destroy();
+      }
+
+      careerChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Salary",
+              data: salaryData,
+              backgroundColor: "rgba(252,145,58,0.7)",
+              borderColor: "rgba(252,145,58,1)",
+              borderWidth: 1
+            },
+            {
+              label: "Demand",
+              data: demandData,
+              backgroundColor: "rgba(255,78,80,0.7)",
+              borderColor: "rgba(255,78,80,1)",
+              borderWidth: 1
+            },
+            {
+              label: "Trend",
+              data: trendData,
+              backgroundColor: "rgba(255,180,120,0.7)",
+              borderColor: "rgba(255,180,120,1)",
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 5,
+              ticks: { stepSize: 1 }
+            }
+          }
+        }
+      });
+    });
+
+    // Personality Quiz (6 questions)
+    const quizArea = document.getElementById('quizArea');
+    const startQuizBtn = document.getElementById('startQuizBtn');
+
+    const quizQuestions = [
+      {
+        q: "What do you enjoy more?",
+        a: "Solving logical problems",
+        b: "Designing creative visuals"
+      },
+      {
+        q: "Which sounds better for you?",
+        a: "Working with data and code",
+        b: "Working with people and ideas"
+      },
+      {
+        q: "Which task sounds more fun?",
+        a: "Debugging a program until it works",
+        b: "Designing a poster or social media post"
+      },
+      {
+        q: "In a group project you usually:",
+        a: "Handle the technical implementation",
+        b: "Handle presentation, design, or coordination"
+      },
+      {
+        q: "You feel more confident about:",
+        a: "Math, logic, and problem solving",
+        b: "Storytelling, visuals, and communication"
+      },
+      {
+        q: "Your ideal workday is:",
+        a: "Focused time writing code or analyzing data",
+        b: "Brainstorming ideas and creating content"
+      }
+    ];
+
+    let quizIndex = 0;
+    let techScore = 0;
+    let creativeScore = 0;
+
+    startQuizBtn.addEventListener('click', () => {
+      quizIndex = 0;
+      techScore = 0;
+      creativeScore = 0;
+      showQuizQuestion();
+    });
+
+    function showQuizQuestion() {
+      const q = quizQuestions[quizIndex];
+      quizArea.innerHTML = `
+        <p class="fw-bold mb-3">${q.q}</p>
+        <div class="d-grid gap-2">
+          <button class="btn btn-ombre" onclick="quizAnswer('a')">${q.a}</button>
+          <button class="btn btn-ombre" onclick="quizAnswer('b')">${q.b}</button>
+        </div>
+      `;
+    }
+
+    window.quizAnswer = function(ans) {
+      if (ans === 'a') techScore++;
+      else creativeScore++;
+
+      quizIndex++;
+      if (quizIndex < quizQuestions.length) {
+        showQuizQuestion();
+      } else {
+        let suggestion = "Balanced profile – you can explore both technical and creative roles.";
+        if (techScore > creativeScore) {
+          suggestion = "You lean more towards technical roles like Developer or Data Analyst.";
+        } else if (creativeScore > techScore) {
+          suggestion = "You lean more towards creative roles like UI/UX Designer or Digital Marketer.";
+        }
+        quizArea.innerHTML = `
+          <p class="mb-2"><strong>Quiz Result:</strong></p>
+          <p>${suggestion}</p>
+          <button class="btn btn-ombre w-100 mt-2" id="restartQuizBtn">Retake Quiz</button>
+        `;
+        document.getElementById('restartQuizBtn').addEventListener('click', () => {
+          quizIndex = 0;
+          techScore = 0;
+          creativeScore = 0;
+          showQuizQuestion();
+        });
+      }
+    };
+  </script>
+</body>
+</html>
+
+
+
+

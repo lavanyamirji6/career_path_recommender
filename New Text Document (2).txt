@@ -1,0 +1,134 @@
+:root {
+  --red: #FF4E50;
+  --orange: #FC913A;
+  --light-bg: #FFF5EC;
+  --text-dark: #1C1C1C;
+  --dark-bg: #1c1c1c;
+  --dark-text: #f5f5f5;
+}
+
+/* Base + dark mode */
+
+body {
+  background-color: var(--light-bg);
+  color: var(--text-dark);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+body.dark-mode {
+  background-color: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .bg-light,
+body.dark-mode .bg-white,
+body.dark-mode .bg-warning-subtle,
+body.dark-mode .modal-content {
+  background-color: #1e1e1e !important;
+  color: var(--dark-text) !important;
+  border-color: #333 !important;
+}
+
+body.dark-mode .text-dark,
+body.dark-mode .text-secondary {
+  color: #ccc !important;
+}
+
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode h5, 
+body.dark-mode label, 
+body.dark-mode p {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .form-control {
+  background-color: #2a2a2a !important;
+  color: var(--dark-text) !important;
+  border: 1px solid #555 !important;
+}
+
+body.dark-mode .form-control::placeholder {
+  color: #888 !important;
+}
+
+body.dark-mode .btn-light {
+  background-color: #333 !important;
+  color: var(--orange) !important;
+  border: none;
+}
+
+body.dark-mode .navbar .nav-link {
+  color: #fff !important;
+}
+
+/* Header and text gradient */
+
+.header-ombre {
+  background: linear-gradient(to right, var(--red), var(--orange));
+}
+
+.text-gradient {
+  background: linear-gradient(to right, var(--red), var(--orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}
+
+/* Buttons */
+
+.btn-ombre {
+  background: linear-gradient(135deg, var(--red) 0%, var(--orange) 50%, #ff6a3d 100%);
+  border: none;
+  color: white;
+  border-radius: 12px;
+  transition: background 0.3s ease, transform 0.1s ease;
+}
+
+.btn-ombre:hover {
+  background: linear-gradient(135deg, #e64548 0%, #e9832f 50%, #ff7a4f 100%);
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* Global top-right ombre glow */
+
+.background-glow {
+  position: fixed;
+  top: -120px;
+  right: -160px;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle at top right, var(--orange), var(--red), transparent 70%);
+  opacity: 0.7;
+  filter: blur(90px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Apple-inspired warm glassy gradient for the quiz card */
+
+.apple-quiz-card {
+  background:
+    radial-gradient(circle at 70% 0%, rgba(252, 145, 58, 1) 0%, rgba(252, 145, 58, 0.2) 45%, transparent 70%),
+    radial-gradient(circle at 20% 80%, rgba(255, 78, 80, 0.95) 0%, rgba(255, 78, 80, 0.2) 45%, transparent 70%),
+    linear-gradient(135deg, #fff7f0 0%, #ffe4d9 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ensure content sits above the glow */
+
+.apple-quiz-card h3,
+.apple-quiz-card p,
+.apple-quiz-card button {
+  position: relative;
+  z-index: 1;
+}
+
+body{
+	background-color: lime!
+important;
+}
